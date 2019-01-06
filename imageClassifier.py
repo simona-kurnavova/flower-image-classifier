@@ -22,8 +22,8 @@ flowerClasses = os.listdir("flowers/")
 inputs = [] # images
 outputs = [] # expected/real labels of images
 
-height = 100 # new height of all images
-width = 100 # new width of all images
+height = 64 # new height of all images
+width = 64 # new width of all images
 
 # loads and correctly resizes all images
 def loadImages(index):
@@ -59,27 +59,27 @@ filters: the dimensionality of the output space (i.e. the number of output filte
 kernel_size: An integer or tuple/list of 2 integers, specifying the height and width of the 2D convolution window.
 strides: specifying the strides of the convolution along the height and width
 '''
-model.add(keras.layers.Conv2D(filters = 32, kernel_size = 5, strides = 1, padding = 'same', activation = 'relu'))
+model.add(keras.layers.Conv2D(filters = 8, kernel_size = 5, strides = 2, padding='same', activation = 'relu'))
 model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
 
-model.add(keras.layers.Conv2D(filters = 64, kernel_size = 5, strides = 1, padding = 'same', activation = 'relu'))
+model.add(keras.layers.Conv2D(filters = 16, kernel_size = 3, strides = 2, padding = 'same', activation = 'relu'))
 model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
 
-model.add(keras.layers.Conv2D(filters = 96, kernel_size = 3, strides = 1, padding = 'same', activation = 'relu'))
-model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
+#model.add(keras.layers.Conv2D(filters = 96, kernel_size = 3, strides = 1, padding = 'same', activation = 'relu'))
+#model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
 
-model.add(keras.layers.Conv2D(filters = 128, kernel_size = 3, strides = 1, padding = 'same', activation = 'relu'))
-model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
+#model.add(keras.layers.Conv2D(filters = 128, kernel_size = 3, strides = 1, padding = 'same', activation = 'relu'))
+#model.add(keras.layers.MaxPool2D(pool_size = 2, padding = 'same'))
 
-#model.add(keras.layers.Dropout(0.25))
 model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(512, activation = 'sigmoid')) # or sigmoid ???
-#model.add(keras.layers.Dropout(0.5))
+
+model.add(keras.layers.Dense(1024, activation = 'sigmoid'))
+
 model.add(keras.layers.Dense(len(flowerClasses), activation = 'softmax'))
 
-optimizer = keras.optimizers.Adam(lr=1e-3)
-model.compile(optimizer = optimizer, loss = 'categorical_crossentropy', metrics=['accuracy'])
-model.fit(x = np.array(x_train), y = np.array(y_train), epochs = 50) #
+# optimizer = keras.optimizers.Adam(lr=1e-3)
+model.compile(optimizer = "adadelta", loss = 'categorical_crossentropy', metrics=['accuracy'])
+model.fit(x = np.array(x_train), y = np.array(y_train), epochs = 20) #
 model.summary()
 
 
